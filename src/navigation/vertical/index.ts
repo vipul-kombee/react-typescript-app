@@ -4,20 +4,30 @@ import { VerticalNavItemsType } from 'src/@core/layouts/types'
 const navigation = (): VerticalNavItemsType => {
   return [
     {
-      title: 'DashBoard',
+      title: 'Users',
       path: '/home',
       icon: 'tabler:smart-home'
     },
     {
-      title: 'Users',
+      title: 'Activity Log',
       path: '/second-page',
       icon: 'tabler:mail'
     },
     {
-      path: '/acl',
+      path: '/supplier',
       action: 'read',
       subject: 'acl-page',
-      title: 'Access Control',
+      title: 'Supplier',
+      icon: 'tabler:shield'
+    },
+    {
+      title: 'Color',
+      path: '/color',
+      icon: 'tabler:shield'
+    },
+    {
+      title: 'Product',
+      path: '/product',
       icon: 'tabler:shield'
     }
   ]

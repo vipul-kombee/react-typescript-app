@@ -32,7 +32,6 @@ import CustomTextField from 'src/@core/components/mui/text-field'
 
 // ** Styled Components
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
-import { data } from './data'
 interface InvoiceStatusObj {
   [key: string]: {
     icon: string
@@ -74,41 +73,16 @@ const defaultColumns: GridColDef[] = [
   {
     flex: 0.15,
     minWidth: 140,
-    field: 'email',
-    headerName: 'Email Id',
-    renderCell: ({ row }) => <Typography sx={{ color: 'text.secondary' }}>{row.email}</Typography>
+    field: 'address',
+    headerName: 'Address',
+    renderCell: ({ row }) => <Typography sx={{ color: 'text.secondary' }}>{row.address}</Typography>
   },
   {
     flex: 0.1,
     minWidth: 100,
-    field: 'role',
-    headerName: 'Balance',
-    renderCell: ({ row }) => <Typography sx={{ color: 'text.secondary' }}>{row.role}</Typography>
-  },
-  {
-    flex: 0.15,
-    minWidth: 140,
-    field: 'DOB',
-    headerName: 'DOB',
-    renderCell: ({ row }) => <Typography sx={{ color: 'text.secondary' }}>{row.DOB}</Typography>
-  },
-  {
-    flex: 0.15,
-    minWidth: 140,
-    field: 'gender',
-    headerName: 'Gender',
-    renderCell: ({ row }) => (
-      <Typography sx={{ color: 'text.secondary' }}>{row.gender == 'male' ? 'Male' : 'Female'}</Typography>
-    )
-  },
-  {
-    flex: 0.15,
-    minWidth: 140,
-    field: 'status',
-    headerName: 'Status',
-    renderCell: ({ row }) => (
-      <Typography sx={{ color: 'text.secondary' }}>{row.status ? 'Actice' : 'Inactive'}</Typography>
-    )
+    field: 'remark',
+    headerName: 'Remark',
+    renderCell: ({ row }) => <Typography sx={{ color: 'text.secondary' }}>{row.remark}</Typography>
   }
 ]
 
@@ -121,7 +95,7 @@ const UserList = () => {
   const [selectedRows, setSelectedRows] = useState<GridRowId[]>([])
   const [startDateRange, setStartDateRange] = useState<DateType>(null)
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
-  const [userdata, setUserdata] = useState(data)
+  const [data, setData] = useState([])
 
   const handleFilter = (val: string) => {
     setValue(val)
@@ -129,6 +103,15 @@ const UserList = () => {
 
   const handleStatusValue = (e: SelectChangeEvent<unknown>) => {
     setStatusValue(e.target.value as string)
+  }
+
+  const handleOnChangeRange = (dates: any) => {
+    const [start, end] = dates
+    if (start !== null && end !== null) {
+      setDates(dates)
+    }
+    setStartDateRange(start)
+    setEndDateRange(end)
   }
 
   const columns: GridColDef[] = [
@@ -147,16 +130,16 @@ const UserList = () => {
             </IconButton>
           </Tooltip>
           <Tooltip title='View'>
-            <IconButton size='small' component={Link} sx={{ color: 'text.secondary' }} href={''}>
+            <IconButton size='small' component={Link} sx={{ color: 'text.secondary' }} href={``}>
               <Icon icon='tabler:eye' />
             </IconButton>
           </Tooltip>
-          <Tooltip title='Edit'>
+          <Tooltip title='View'>
             <IconButton
               size='small'
               component={Link}
               sx={{ color: 'text.secondary' }}
-              href={{ pathname: `/home/${row.id}/edit`, query: { id: row.id } }}
+              href={{ pathname: `/supplier/${row.id}/edit`, query: { id: row.id } }}
             >
               <Icon icon='tabler:edit' />
             </IconButton>
@@ -167,56 +150,34 @@ const UserList = () => {
   ]
 
   return (
-    <DatePickerWrapper>
-      <Grid container spacing={6}>
-        <Grid item xs={12}>
-          <Card>
-            <CardHeader title='Filters' />
-            <CardContent>
-              <Grid container spacing={6}>
-                <Grid item xs={12} sm={3}>
-                  <CustomTextField
-                    select
-                    fullWidth
-                    label='User Status'
-                    SelectProps={{ value: statusValue, onChange: e => handleStatusValue(e) }}
-                  >
-                    <MenuItem value=''>None</MenuItem>
-                    <MenuItem value='downloaded'>Sub Admin</MenuItem>
-                    <MenuItem value='draft'>Administrator</MenuItem>
-                  </CustomTextField>
-                </Grid>
-              </Grid>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12}>
-          <Card>
-            <TableHeader
-              callbackurl='/home/add'
-              buttonName='Create User'
-              placeHolderName='Search User'
-              value={value}
-              selectedRows={selectedRows}
-              handleFilter={handleFilter}
-            />
-            <DataGrid
-              autoHeight
-              pagination
-              rowHeight={50}
-              rows={userdata}
-              columns={columns}
-              checkboxSelection
-              disableRowSelectionOnClick
-              pageSizeOptions={[10, 25, 50]}
-              paginationModel={paginationModel}
-              onPaginationModelChange={setPaginationModel}
-              onRowSelectionModelChange={rows => setSelectedRows(rows)}
-            />
-          </Card>
-        </Grid>
+    <Grid container spacing={6}>
+      <Grid item xs={12}>
+        <Card>
+          <CardHeader title='Supplier List' />
+          <TableHeader
+            callbackurl='/supplier/add'
+            buttonName='Create Supplier'
+            placeHolderName='Search Supplier'
+            value={value}
+            selectedRows={selectedRows}
+            handleFilter={handleFilter}
+          />
+          <DataGrid
+            autoHeight
+            pagination
+            rowHeight={50}
+            rows={data}
+            columns={columns}
+            checkboxSelection
+            disableRowSelectionOnClick
+            pageSizeOptions={[5, 10, 25]}
+            paginationModel={paginationModel}
+            onPaginationModelChange={setPaginationModel}
+            onRowSelectionModelChange={rows => setSelectedRows(rows)}
+          />
+        </Card>
       </Grid>
-    </DatePickerWrapper>
+    </Grid>
   )
 }
 
