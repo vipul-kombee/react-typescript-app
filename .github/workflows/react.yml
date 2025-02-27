@@ -29,8 +29,8 @@ jobs:
       - name: Check TypeScript types
         run: npm run type-check || true  
 
-      - name: Run ESLint
-        run: npm run lint || true  
+      - name: Run ESLint (Fail if errors exist)
+        run: npm run lint
 
-      - name: Build Application
+      - name: Build Application (Fail if build fails)
         run: npm run build
