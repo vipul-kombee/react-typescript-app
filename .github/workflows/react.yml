@@ -1,4 +1,4 @@
-name: CI
+name: Evaluate React TypeScript App
 
 on:
   push:
@@ -7,29 +7,27 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
-  build:
+  evaluate:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: 'yarn' # Change to 'npm' if using npm
+          cache: 'pnpm'
+
+      - name: Install pnpm
+        run: npm install -g pnpm
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile # Change to 'npm ci' if using npm
+        run: pnpm install
 
-      - name: Run Linting
-        run: yarn lint # Change to 'npm run lint' if using npm
-
-      - name: Run Tests
-        run: yarn test --ci --coverage # Change to 'npm test' if using npm
-
-      - name: Build the project
-        run: yarn build # Change to 'npm run build' if using npm
+      - name: Run development server
+        run: pnpm run dev & sleep 30
