@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'yarn' # Change to 'npm' if using npm
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile # Change to 'npm ci' if using npm
+
+      - name: Run Linting
+        run: yarn lint # Change to 'npm run lint' if using npm
+
+      - name: Run Tests
+        run: yarn test --ci --coverage # Change to 'npm test' if using npm
+
+      - name: Build the project
+        run: yarn build # Change to 'npm run build' if using npm
