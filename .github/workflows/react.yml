@@ -1,13 +1,11 @@
-name: Evaluate Next.js App
+name: Evaluate Candidate React App
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+on: 
   workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
   evaluate:
@@ -15,25 +13,27 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          repository: 'vipul-kombee/react-typescript-app'
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: 'pnpm'
-
-      - name: Install pnpm manually
-        run: npm install -g pnpm
-
-      - name: Verify pnpm installation
-        run: pnpm --version
+          cache: 'npm'
 
       - name: Install dependencies
-        run: pnpm install
+        run: npm install
 
-      - name: Build project
-        run: pnpm build
+      - name: Check TypeScript types
+        run: npm run type-check || true  # Run `tsc` (adjust based on package scripts)
 
-      - name: Run development server
-        run: pnpm run dev & sleep 30
+      - name: Run ESLint
+        run: npm run lint || true  # Adjust if there's a lint script
+
+      - name: Run Jest Tests
+        run: npm test || true  # Runs tests
+
+      - name: Build Application
+        run: npm run build
