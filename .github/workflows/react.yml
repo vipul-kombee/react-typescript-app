@@ -1,4 +1,4 @@
-name: Evaluate React TypeScript App
+name: Evaluate Next.js App
 
 on:
   push:
@@ -34,6 +34,9 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
+
+      - name: Build project
+        run: pnpm build
 
       - name: Run development server
         run: pnpm run dev & sleep 30
